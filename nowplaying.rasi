@@ -1,0 +1,129 @@
+/******--- author @Harsh-bin Github --*****/
+/******--- restyled: transparencia estilo polybar ---*****/
+
+configuration {
+    show-icons:                 false;
+}
+
+* {
+    // OJO: rofi usa #RRGGBBAA (alfa al FINAL).
+    // Exterior: mismo color que urxvt (#1e1e2e). Su URxvt.background es [5]#1e1e2e
+    // ([5] = 5% de opacidad) -> en rofi #1e1e2e0D (0D ~ 13/255 ~ 5%), deja que picom componga.
+    // Si lo querés más sólido, subí el alfa (p.ej. #1e1e2eCC).
+    background:     #1e1e2e0D;
+    // Interior (tarjetas texto/portada/botones): negro translúcido.
+    background-alt: #000000CC;
+    foreground:     #cdd6f4FF;
+    selected:       #89b4faFF;
+    active:         #89b4faFF;
+    urgent:         #f38ba8FF;
+    border:         #3a3a3aCC;   // marco exterior: gris neutro translúcido
+    dark:           #1e1e2eFF;   // texto sobre botón seleccionado
+}
+
+/*****----- Main Window -----*****/
+window {
+    transparency:                "real";
+    location:                    southeast;
+    anchor:                      southeast;
+    fullscreen:                  false;
+    width:                       500px;
+    // Altura ajustada para que la fila de la portada quede CUADRADA (130px).
+    // Si cambiás el tamaño de la portada o la fila de botones, reajustá esto.
+    height:                      218px;
+    x-offset:                    -20px;
+    y-offset:                    -20px;
+    enabled:                     true;
+    cursor:                      "default";
+    background-color:            @background;
+    border:                      1px;
+    border-color:                @border;
+    border-radius:               10px;
+    padding:                     16px;
+}
+
+mainbox {
+    enabled:                     true;
+    spacing:                     16px;
+    background-color:            transparent;
+    orientation:                 vertical;
+    children:                    [ "middle-wrapper", "listview" ];
+}
+
+middle-wrapper {
+    enabled:                     true;
+    orientation:                 horizontal;
+    spacing:                     16px;
+    background-color:            transparent;
+    expand:                      true;
+    children:                    [ "album-art", "custom-text-box" ];
+}
+
+album-art {
+    enabled:                     true;
+    // rofi estira el alto de esta caja al de la fila; manteniendo la fila
+    // cuadrada (alto == 130) la imagen con scale "height" no se recorta.
+    width:                       130px;
+    height:                      130px;
+    background-color:            @background-alt;
+    background-image:            url("~/.config/rofi/nowplaying/album_art.png", height);
+    border-radius:               10px;
+    expand:                      false;
+}
+
+custom-text-box {
+    enabled:                     true;
+    expand:                      true;
+    padding:                     16px;
+    background-color:            @background-alt;
+    border-radius:               10px;
+    children:                    [ "textbox-custom" ];
+}
+
+textbox-custom {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  @foreground;
+    vertical-align:              0.5;
+    horizontal-align:            0.5;
+    markup:                      true;
+    font:                        "JetBrainsMono Nerd Font Bold 12";
+    str:                         "Loading...";
+}
+
+/*****-----(Buttons) -----*****/
+listview {
+    enabled:                     true;
+    columns:                     6;
+    lines:                       1;
+    dynamic:                     true;
+    reverse:                     false;
+    spacing:                     10px;
+    background-color:            transparent;
+    cursor:                      "default";
+    expand:                      false;
+}
+
+element {
+    enabled:                     true;
+    padding:                     8px;
+    border-radius:               10px;
+    cursor:                      pointer;
+    background-color:            @background-alt;
+    text-color:                  @foreground;
+    orientation:                 horizontal;
+}
+
+element selected {
+    background-color:            @selected;
+    text-color:                  @dark;
+}
+
+element-text {
+    background-color:            transparent;
+    text-color:                  inherit;
+    cursor:                      inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.5;
+    font:                        "JetBrainsMono Nerd Font 12";
+}
